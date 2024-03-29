@@ -19,8 +19,10 @@ apt update
 apt upgrade
 apt install -y apt-transport-https lsb-release ca-certificates wget curl 
 
-systemctl stop apparmor
-apt remove apparmor
+if service --status-all | grep -Fq 'apparmor'; then    
+   systemctl stop apparmor
+   apt remove apparmor
+fi
 
 # Package installation
 apt install -y \
@@ -34,24 +36,24 @@ apt install -y \
    certbot python3-certbot-apache
 
 #Add user asterisk
-adduser asterisk --uid 5000 --gecos "Asterisk PBX" --disabled-password --disabled-login --home /var/lib/asterisk
+if ! id -u "asterisk" >/dev/null 2>&1; then
+   adduser asterisk --uid 5000 --gecos "Asterisk PBX" --disabled-password --disabled-login --home /var/lib/asterisk
+fi
 
 #Download Asterisk
-ASTERISK_DIR=${ASTERISK_SRC_FILE%%.*}
+ASTERISK_DIR="${ASTERISK_SRC_FILE%%.*}"
 ASTERISK_URL_DOWNLOAD=$ASTERISK_URL/$ASTERISK_SRC_FILE
-if "$ASTERISK_SRC_FILE" =~ "certified"; then
+if echo "$ASTERISK_SRC_FILE" | grep -Fq "certified" ; then
    ASTERISK_URL_DOWNLOAD=$ASTERISK_URL_CERTIFIED/$ASTERISK_SRC_FILE
 fi
 
 
 cd /usr/src
-wget https://downloads.digium.com/pub/telephony/codec_opus/asterisk-20.0/x86-64/codec_opus-20.0_current-x86_64.tar.gz
-
 wget $ASTERISK_URL_DOWNLOAD
 
 tar zxvf $ASTERISK_SRC_FILE
 
-cd $ASTERISK_DIR
+cd ${ASTERISK_DIR}*/
 
 #Install Asterisk dependencies
 contrib/scripts/install_prereq install
@@ -508,12 +510,6 @@ wget repo.issabel.org/azure_es_female.tgz
 mkdir /usr/share/asterisk/sounds/es 
 tar zxvf azure_es_female.tgz -C /usr/share/asterisk/sounds/es 
 
-# Compile issabelPBX language files
-cd /usr/src/issabelPBX/
-build/compile_gettext.sh 
-systemctl restart apache2 
-
-
 # If for some reason we do not have language set, default to english
 if [ "$language" == "" ]; then
     language=en_EN
@@ -522,11 +518,13 @@ fi
 if [ -z "${ADMIN_PASSWORD}" ]; then
    ADMIN_PASSWORD=ADMINadmin1234
 fi
-# Install IssabelPBX with install_amp
-$where/framework/install_amp --dbuser=root --installdb --scripted --language=$language --adminpass=ADMIN_PASSWORD
 
+# Compile issabelPBX language files
+cd /usr/src/issabelPBX/
+build/compile_gettext.sh 
+systemctl restart apache2 
+
+# Install IssabelPBX with install_amp
+framework/install_amp --dbuser=root --installdb --scripted --language=$language --adminpass=$ADMIN_PASSWORD
 
 systemctl restart fail2ban 
-
-sleep 2
-clear
