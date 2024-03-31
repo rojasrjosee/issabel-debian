@@ -290,6 +290,8 @@ PrivateTmp=true
 WantedBy=multi-user.target
 EOF
 
+mkdir -p /var/lib/asterisk/sounds/es
+
 #Set permisions to asterisk directories
 chown -R asterisk: /etc/asterisk/
 chown -R asterisk: /var/run/asterisk
@@ -468,7 +470,10 @@ EOF
 
 # IssabelPBX Installation
 cd /usr/src
-git clone https://github.com/asternic/issabelPBX.git 
+git clone https://github.com/asternic/issabelPBX.git
+cp "$( dirname -- "${BASH_SOURCE[0]}"; )/install_amp.patch" issabelPBX
+cd /usr/src/issabelPBX/
+git apply install_amp.patch
 
 # Asterisk configs
 sed -i '/^displayconnects/a #include manager_general_additional.conf' /etc/asterisk/manager.conf
@@ -515,9 +520,8 @@ EOF
 fi
 
 # Install spanish prompts
-wget repo.issabel.org/azure_es_female.tgz 
-mkdir /usr/share/asterisk/sounds/es 
-tar zxvf azure_es_female.tgz -C /usr/share/asterisk/sounds/es 
+wget repo.issabel.org/azure_es_female.tgz  
+tar zxvf azure_es_female.tgz -C /var/lib/asterisk/sounds/es
 
 # If for some reason we do not have language set, default to english
 if [ "$language" == "" ]; then

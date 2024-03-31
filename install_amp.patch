@@ -1,0 +1,14 @@
+diff --git a/framework/install_amp b/framework/install_amp
+index 8902e3e4..7160e555 100755
+--- a/framework/install_amp
++++ b/framework/install_amp
+@@ -1335,7 +1335,8 @@ $verinfo = $tmpout;
+ //  'asterisk'
+ outn("Checking for Asterisk version..");
+ if ((preg_match('/^Asterisk (\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches)) ||
+-    (preg_match('/^Asterisk SVN-(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches))) {
++    (preg_match('/^Asterisk SVN-(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches)) ||
++    (preg_match('/^Asterisk certified\/(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches))) {
+     if ((version_compare($matches[1], "1.6") < 0)) {
+         fatal("Asterisk 1.6, 1.8 or 10 is required for this version of IssabelPBX. Detected version is: ".$matches[1]);
+     }
