@@ -24,13 +24,13 @@ sed -i -E 's/^(deb.+)main(.+)/\1main contrib non-free\2/g' /etc/apt/sources.list
 
 #Updata and upgrade package
 apt update
-apt upgrade
+apt upgrade -y
 apt install -y apt-transport-https lsb-release ca-certificates wget curl 
 
 #Uninstall apparmor
 if service --status-all | grep -Fq 'apparmor'; then
    systemctl stop apparmor
-   apt remove apparmor
+   apt remove -y apparmor
 fi
 
 #Package installation
