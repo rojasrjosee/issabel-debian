@@ -12,6 +12,7 @@ if ! grep -Pq "export PATH=$PATH:/usr/local/sbin:/usr/sbin" "/etc/bash.bashrc"; 
    echo -e "Error: /usr/sbin is not in PATH\n"
    echo -e "Run: source /etc/bash.bashrc \n"
    echo -e "and run ./install-issabel-debian.sh\n"
+   exit 1
 fi
 
 # Enable non free and contrib repos
