@@ -8,12 +8,16 @@ source issabel_var.env
 
 #Add sbin to path
 if ! grep -Pq "export PATH=$PATH:/usr/local/sbin:/usr/sbin" "/etc/bash.bashrc"; then
-   echo "export PATH=$PATH:/usr/local/sbin:/usr/sbin" >> /etc/bash.bashrc 
+   echo "export PATH=$PATH:/usr/local/sbin:/usr/sbin" >> /etc/bash.bashrc
+fi
+
+if ! $(echo "$PATH" | grep -Fq "sbin") ; then
    echo -e "Error: /usr/sbin is not in PATH\n"
    echo -e "Run: source /etc/bash.bashrc \n"
    echo -e "and run ./install-issabel-debian.sh\n"
    exit 1
 fi
+
 
 # Enable non free and contrib repos
 sed -i -E 's/^(deb.+)main(.+)/\1main contrib non-free\2/g' /etc/apt/sources.list
