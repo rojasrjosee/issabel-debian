@@ -290,7 +290,7 @@ PrivateTmp=true
 WantedBy=multi-user.target
 EOF
 
-mkdir -p /var/lib/asterisk/sounds/es
+tar zxvf "$( dirname -- "${BASH_SOURCE[0]}"; )/asterisk_issabel.tar.gz" -C /etc
 
 #Set permisions to asterisk directories
 chown -R asterisk: /etc/asterisk/
