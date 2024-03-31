@@ -6,25 +6,27 @@
 }
 source issabel_var.env
 
-#Add sbin
+#Add sbin to path
 if ! grep -q "export PATH=$PATH:/usr/local/sbin:/usr/sbin" "/etc/bash.bashrc"; then
    echo "export PATH=$PATH:/usr/local/sbin:/usr/sbin" >> /etc/bash.bashrc 
-   source /etc/bash.bashrc
+   exec bash
 fi
 
 # Enable non free and contrib repos
 sed -i -E 's/^(deb.+)main(.+)/\1main contrib non-free\2/g' /etc/apt/sources.list
 
+#Updata and upgrade package
 apt update
 apt upgrade
 apt install -y apt-transport-https lsb-release ca-certificates wget curl 
 
-if service --status-all | grep -Fq 'apparmor'; then    
+#Uninstall apparmor
+if service --status-all | grep -Fq 'apparmor'; then
    systemctl stop apparmor
    apt remove apparmor
 fi
 
-# Package installation
+#Package installation
 apt install -y \
    git apache2 gettext sngrep\
    unixodbc odbcinst unixodbc-dev \
