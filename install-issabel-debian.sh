@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SOURCE_DIR_SCRIPT=$(pwd)
+
 [[ -s issabel_var.env ]] || {
    echo "Please create y complete file issabel_var.env"
    exit 1
@@ -290,7 +292,7 @@ PrivateTmp=true
 WantedBy=multi-user.target
 EOF
 
-tar zxvf "$( dirname -- "${BASH_SOURCE[0]}"; )/asterisk_issabel.tar.gz" -C /etc
+tar zxvf $SOURCE_DIR_SCRIPT/asterisk_issabel.tar.gz -C /etc
 
 #Set permisions to asterisk directories
 chown -R asterisk: /etc/asterisk/
@@ -471,7 +473,7 @@ EOF
 # IssabelPBX Installation
 cd /usr/src
 git clone https://github.com/asternic/issabelPBX.git
-cp "$( dirname -- "${BASH_SOURCE[0]}"; )/install_amp.patch" issabelPBX
+cp $SOURCE_DIR_SCRIPT/install_amp.patch issabelPBX
 cd /usr/src/issabelPBX/
 git apply install_amp.patch
 
