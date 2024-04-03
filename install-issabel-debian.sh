@@ -475,9 +475,16 @@ EOF
 # IssabelPBX Installation
 cd /usr/src
 git clone https://github.com/asternic/issabelPBX.git
+
+# IssabelPbx copy patch 
 cp $SOURCE_DIR_SCRIPT/install_amp.patch issabelPBX
+cp $SOURCE_DIR_SCRIPT/functions_inc.patch issabelPBX
+
+# IssabelPbx apply patch 
 cd /usr/src/issabelPBX/
+
 git apply install_amp.patch
+git apply functions_inc.patch
 
 # Asterisk configs
 sed -i '/^displayconnects/a #include manager_general_additional.conf' /etc/asterisk/manager.conf
@@ -528,8 +535,8 @@ wget repo.issabel.org/azure_es_female.tgz
 tar zxvf azure_es_female.tgz -C /var/lib/asterisk/sounds/es
 
 # If for some reason we do not have language set, default to english
-if [ "$language" == "" ]; then
-    language=en_EN
+if [ "$LANGUAGE" == "" ]; then
+    LANGUAGE=en_EN
 fi
 
 if [ -z "${ISSABEL_ADMIN_PASSWORD}" ]; then
@@ -542,6 +549,6 @@ build/compile_gettext.sh
 systemctl restart apache2 
 
 # Install IssabelPBX with install_amp
-framework/install_amp --dbuser=root --installdb --scripted --language=$language --adminpass=$ISSABEL_ADMIN_PASSWORD
+framework/install_amp --dbuser=root --installdb --scripted --language=$LANGUAGE --adminpass=$ISSABEL_ADMIN_PASSWORD
 
 systemctl restart fail2ban 
