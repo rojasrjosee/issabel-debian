@@ -19,11 +19,20 @@ https://downloads.asterisk.org/pub/telephony/asterisk/old-releases
 
 - **ASTERISK_SRC_FILE**: It is the source asterisk files that we are going to install. 
 For get a list the asterisk certified version run:
-`curl -s https://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
+Run
+```sh
+curl -s https://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
+```
 For new asterisk version run:
-`curl -s https://downloads.asterisk.org/pub/telephony/asterisk/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
+Run
+```sh
+curl -s https://downloads.asterisk.org/pub/telephony/asterisk/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
+```
 For old releases asterisk version run:
-`curl -s https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/ | grep -Po '">\K.+.tar.gz' | grep -Pv "patch|addons|sounds"`
+Run
+```sh
+curl -s https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/ | grep -Po '">\K.+.tar.gz' | grep -Pv "patch|addons|sounds"
+```
 
 - **ISSABEL_ADMIN_PASSWORD**: It is the password for user 'admin' that will 
 be used for: Issabel Web Login and IssabelPBX.
