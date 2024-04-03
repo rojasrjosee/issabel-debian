@@ -293,6 +293,7 @@ WantedBy=multi-user.target
 EOF
 
 tar zxvf $SOURCE_DIR_SCRIPT/asterisk_issabel.tar.gz -C /etc
+rm -f /etc/asteris/stir_shaken.conf
 
 #Set permisions to asterisk directories
 chown -R asterisk: /etc/asterisk/
@@ -338,7 +339,7 @@ mem_used_gauge=$(seq -s= $mem_used_gauge_val|tr -d '[:digit:]')
 mem_free_gauge=$(seq -s- $mem_free_gauge_val|tr -d '[:digit:]')
 mem_gauge=$(echo "[$mem_used_gauge>$mem_free_gauge] $memory_usage")
 
-asterisk_version=`asterisk -rx "core show version"  2>/dev/null| awk '{print  $1" "$2}'`
+asterisk_version=`/usr/sbin/asterisk -V  2>/dev/null| awk '{print  $1" "$2}'`
 asterisk_calls=`asterisk -rx "core show channels"  2>/dev/null | grep "active calls" | awk '{print $1}'`
 
 printf "\033[1;35mSystem load: \033[1;32m %-43s \033[1;35mUptime:  \033[1;32m%s\n" "$load" "$time"
@@ -356,6 +357,7 @@ printf "\e[m\n";
 EOF
 
 chmod 755 /var/lib/asterisk/agi-bin/login-info.sh
+/usr/bin/cp -rf /var/lib/asterisk/agi-bin/login-info.sh /etc/profile.d/login-info.sh 
 
 #Intall php7.4
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -530,8 +532,8 @@ if [ "$language" == "" ]; then
     language=en_EN
 fi
 
-if [ -z "${ADMIN_PASSWORD}" ]; then
-   ADMIN_PASSWORD=ADMINadmin1234
+if [ -z "${ISSABEL_ADMIN_PASSWORD}" ]; then
+   ISSABEL_ADMIN_PASSWORD=XYZADMINadmin1234
 fi
 
 # Compile issabelPBX language files
@@ -540,6 +542,6 @@ build/compile_gettext.sh
 systemctl restart apache2 
 
 # Install IssabelPBX with install_amp
-framework/install_amp --dbuser=root --installdb --scripted --language=$language --adminpass=$ADMIN_PASSWORD
+framework/install_amp --dbuser=root --installdb --scripted --language=$language --adminpass=$ISSABEL_ADMIN_PASSWORD
 
 systemctl restart fail2ban 
