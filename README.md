@@ -38,7 +38,7 @@ curl -s https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/ | gr
 - **ISSABEL_ADMIN_PASSWORD**: It is the password for user 'admin' that will 
 be used for: Issabel Web Login and IssabelPBX.
 
-- **language**: This should be the English "en_EN" or Español "es_ES" 
+- **LANGUAGE**: This should be the English "en_EN" or Español "es_ES" 
 
 - **ISSABLE_SETTINGS_TABLE**: It is the mysql table that contains the issabel setting. 
 By default the values is: issabelpbx_settings
