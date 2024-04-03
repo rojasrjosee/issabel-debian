@@ -18,18 +18,19 @@ for new version https://downloads.asterisk.org/pub/telephony/asterisk and old re
 https://downloads.asterisk.org/pub/telephony/asterisk/old-releases
 
 - **ASTERISK_SRC_FILE**: It is the source asterisk files that we are going to install.
+
   For get a list the asterisk certified version run:
-Run
 ```sh
 curl -s https://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
 ```
+
   For new asterisk version run:
-Run
 ```sh
 curl -s https://downloads.asterisk.org/pub/telephony/asterisk/ | grep -Po '">\K.+.tar.gz' | grep -v "patch"`
 ```
+
   For old releases asterisk version run:
-Run
+
 ```sh
 curl -s https://downloads.asterisk.org/pub/telephony/asterisk/old-releases/ | grep -Po '">\K.+.tar.gz' | grep -Pv "patch|addons|sounds"
 ```
