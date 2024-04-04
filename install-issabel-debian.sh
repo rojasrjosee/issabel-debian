@@ -506,9 +506,9 @@ framework/install_amp --dbuser=root --installdb --scripted --language=$LANGUAGE 
 rm -f /etc/asteris/stir_shaken.conf
 
 # Copy fail2ban config files 
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/action.d/*.conf /etc/fail2ban/action.d
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/filter.d/*.conf /etc/fail2ban/filter.d
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/jail.d/*.conf /etc/fail2ban/jail.d
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/fail2ban/action.d/*.conf /etc/fail2ban/action.d
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/fail2ban/filter.d/*.conf /etc/fail2ban/filter.d
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/fail2ban/jail.d/*.conf /etc/fail2ban/jail.d
 
 systemctl restart fail2ban 
 
