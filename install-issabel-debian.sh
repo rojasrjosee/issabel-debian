@@ -435,13 +435,12 @@ cd /usr/src
 git clone https://github.com/asternic/issabelPBX.git
 
 # IssabelPbx copy patch 
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/*.patch /usr/src/issabelPBX/
-
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/*.patch /usr/src/issabelPBX
 
 # IssabelPbx apply patch 
-cd /usr/src/issabelPBX/
+cd /usr/src/issabelPBX
 
-for i in $(ls *.patch); do echo "Apply patch $i"; git apply $i done
+for i in $(ls *.patch); do echo "Apply patch $i"; git apply $i; done
 
 # Asterisk configs
 sed -i '/^displayconnects/a #include manager_general_additional.conf' /etc/asterisk/manager.conf
