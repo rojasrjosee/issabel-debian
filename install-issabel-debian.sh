@@ -293,7 +293,7 @@ PrivateTmp=true
 WantedBy=multi-user.target
 EOF
 
-tar zxvf $SOURCE_DIR_SCRIPT/asterisk_issabel.tar.gz -C /etc
+tar zxvf $SOURCE_DIR_SCRIPT/asterisk/asterisk_issabel.tar.gz -C /etc
 rm -f /etc/asteris/stir_shaken.conf
 
 mkdir -p /var/lib/asterisk/sounds/es
@@ -315,7 +315,7 @@ chown -R asterisk: /var/lib/asterisk
 systemctl enable asterisk.service
 systemctl start asterisk.service
 
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/login-info.sh /etc/profile.d/login-info.sh 
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/script/login-info.sh /etc/profile.d/login-info.sh 
 chmod 755 /etc/profile.d/login-info.sh
 
 #Intall php7.4
@@ -436,7 +436,7 @@ cd /usr/src
 git clone https://github.com/asternic/issabelPBX.git
 
 # IssabelPbx copy patch 
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/*.patch /usr/src/issabelPBX
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/issabel/patch/*.patch /usr/src/issabelPBX
 
 # IssabelPbx apply patch 
 cd /usr/src/issabelPBX
@@ -505,7 +505,12 @@ framework/install_amp --dbuser=root --installdb --scripted --language=$LANGUAGE 
 
 rm -f /etc/asteris/stir_shaken.conf
 
+# Copy fail2ban config files 
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/action.d/*.conf /etc/fail2ban/action.d
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/filter.d/*.conf /etc/fail2ban/filter.d
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/jail.d/*.conf /etc/fail2ban/jail.d
+
 systemctl restart fail2ban 
 
 # Logrotate
-/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/asterisk_logrotate.conf /etc/logrotate.d/asterisk.conf
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/logrotate/asterisk_logrotate.conf /etc/logrotate.d/asterisk.conf
