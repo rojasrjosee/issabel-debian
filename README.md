@@ -66,8 +66,8 @@ Run
 ./install-issabel-debian.sh
 ```
 
-Generates and config certifies
------------------------------- 
+Generates and config certificates
+---------------------------------
 
 Run
 ```sh
