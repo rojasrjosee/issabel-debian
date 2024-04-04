@@ -450,9 +450,9 @@ touch /etc/asterisk/manager_general_additional.conf
 echo "displayconnects=yes" >/etc/asterisk/manager_general_additional.conf
 echo "timestampevents=yes" >>/etc/asterisk/manager_general_additional.conf
 echo "webenabled=no" >>/etc/asterisk/manager_general_additional.conf
-chown asterisk.asterisk /etc/asterisk/manager_general_additional.conf 
-chown asterisk.asterisk /usr/share/asterisk/agi-bin -R 
-chown asterisk.asterisk /var/lib/asterisk/agi-bin -R 
+chown asterisk: /etc/asterisk/manager_general_additional.conf 
+chown asterisk: /usr/share/asterisk/agi-bin -R 
+chown asterisk: /var/lib/asterisk/agi-bin -R 
 
 # Install PearDB
 pear install DB 
