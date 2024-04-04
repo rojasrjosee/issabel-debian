@@ -60,10 +60,11 @@ fi
 
 
 cd /usr/src
-wget $ASTERISK_URL_DOWNLOAD
+[[ -f $ASTERISK_SRC_FILE ]] || {
+   wget $ASTERISK_URL_DOWNLOAD
+}
 
 tar zxvf $ASTERISK_SRC_FILE
-
 cd ${ASTERISK_DIR}*/
 
 #Install Asterisk dependencies
@@ -505,3 +506,6 @@ framework/install_amp --dbuser=root --installdb --scripted --language=$LANGUAGE 
 rm -f /etc/asteris/stir_shaken.conf
 
 systemctl restart fail2ban 
+
+# Logrotate
+/usr/bin/cp -rf $SOURCE_DIR_SCRIPT/asterisk_logrotate.conf /etc/logrotate.d/asterisk.conf
