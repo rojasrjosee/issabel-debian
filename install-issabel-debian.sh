@@ -9,7 +9,7 @@ SOURCE_DIR_SCRIPT=$(pwd)
 source issabel_var.env
 
 #Add sbin to path
-if ! grep -Pq "export PATH=$PATH:/usr/local/sbin:/usr/sbin" "/etc/bash.bashrc"; then
+if ! grep -Pq 'export PATH=.*/usr/sbin.*' /etc/bash.bashrc; then
    echo "export PATH=$PATH:/usr/local/sbin:/usr/sbin" >> /etc/bash.bashrc
 fi
 
