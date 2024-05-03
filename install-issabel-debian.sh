@@ -81,8 +81,6 @@ menuselect/menuselect \
     --disable-category MENUSELECT_CEL \
     --disable cdr_pgsql \
     --disable cel_pgsql \
-    --enable cdr_adaptive_odbc \
-    --enable cel_odbc \
     --disable-category MENUSELECT_CHANNELS \
     --enable  chan_iax2 \
     --enable  chan_pjsip \
@@ -239,6 +237,10 @@ menuselect/menuselect \
     --disable res_digium_phone \
     --disable res_mwi_external \
     --disable res_stasis_mailbox \
+    --enable cdr_adaptive_odbc \
+    --enable cdr_custom \
+    --enable cdr_manager  \
+    --enable cdr_csv \
     menuselect.makeopts
 
 make
