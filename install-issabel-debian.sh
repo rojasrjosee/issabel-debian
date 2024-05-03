@@ -91,6 +91,7 @@ menuselect/menuselect \
     --enable-category MENUSELECT_FORMATS \
     --enable-category MENUSELECT_FUNCS \
     --enable-category  MENUSELECT_PBX \
+    --enable app_macro \
     --enable  pbx_config \
     --enable pbx_loopback \
     --enable pbx_spool \
