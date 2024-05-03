@@ -1,14 +1,13 @@
 diff --git a/framework/amp_conf/htdocs/admin/functions.inc.php b/framework/amp_conf/htdocs/admin/functions.inc.php
-index fa2e139e..71f403db 100644
+index ae07f673..63dd02c2 100644
 --- a/framework/amp_conf/htdocs/admin/functions.inc.php
 +++ b/framework/amp_conf/htdocs/admin/functions.inc.php
-@@ -280,6 +280,9 @@ function engine_getinfo($force_read=false) {
-         }
- 
-         if (preg_match('/Asterisk (\d+(\.\d+)*)(-?(\S*))/', $verinfo, $matches)) {
-+            $engine_info = array('engine'=>'asterisk', 'version' => $matches[1], 'additional' => $matches[4], 'raw' => $verinfo);
-+	    $gotinfo = true;
-+        } elseif (preg_match('/Asterisk certified.(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches)) {
+@@ -285,7 +285,7 @@ function engine_getinfo($force_read=false) {
+         } elseif (preg_match('/Asterisk SVN-(\d+(\.\d+)*)(-?(\S*))/', $verinfo, $matches)) {
              $engine_info = array('engine'=>'asterisk', 'version' => $matches[1], 'additional' => $matches[4], 'raw' => $verinfo);
              $gotinfo = true;
-         } elseif (preg_match('/Asterisk SVN-(\d+(\.\d+)*)(-?(\S*))/', $verinfo, $matches)) {
+-         } elseif (preg_match('/Asterisk certified\/(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches)) {
++         } elseif (preg_match('/Asterisk certified.(\d+(\.\d+)*)(-?(.*))$/', $verinfo, $matches)) {
+             $engine_info = array('engine'=>'asterisk', 'version' => $matches[1], 'additional' => $matches[4], 'raw' => $verinfo);
+             $gotinfo = true;
+         } elseif (preg_match('/Asterisk SVN-branch-(\d+(\.\d+)*)-r(-?(\S*))/', $verinfo, $matches)) {
