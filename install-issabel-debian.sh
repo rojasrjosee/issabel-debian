@@ -44,7 +44,8 @@ apt install -y \
    dialog locales-all libwww-perl \
    mpg123 fail2ban  \
    cracklib-runtime dnsutils \
-   certbot python3-certbot-apache
+   certbot python3-certbot-apache \
+   iptables
 
 #Add user asterisk
 if ! id -u "asterisk" >/dev/null 2>&1; then
