@@ -527,5 +527,5 @@ cd vosk-asterisk/
 ./configure --with-asterisk=${ASTERISK_DIR}* --prefix=/usr
 make
 make install
-/usr/bin/ -rf /usr/etc/asterisk/* /etc/asterisk/
+/usr/bin/cp -rf /usr/etc/asterisk/* /etc/asterisk/
 /usr/sbin/asterisk -rx 'module load res_speech_vosk.so'
