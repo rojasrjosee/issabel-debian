@@ -518,3 +518,13 @@ systemctl restart fail2ban
 
 # Logrotate
 /usr/bin/cp -rf $SOURCE_DIR_SCRIPT/logrotate/asterisk_logrotate.conf /etc/logrotate.d/asterisk.conf
+
+#Install Vosk
+cd /usr/src
+git clone  https://github.com/alphacep/vosk-asterisk
+cd vosk-asterisk/
+./bootstrap
+./configure --with-asterisk=${ASTERISK_DIR}* --prefix=/usr
+make
+make install
+/usr/bin/ -rf /usr/etc/asterisk/* /etc/asterisk/
