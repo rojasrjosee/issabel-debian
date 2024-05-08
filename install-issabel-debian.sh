@@ -450,12 +450,12 @@ for i in $(ls *.patch); do echo "Apply patch $i"; git apply $i; done
 # Asterisk configs
 sed -i '/^displayconnects/a #include manager_general_additional.conf' /etc/asterisk/manager.conf
 sed -i '/^displayconnects/d' /etc/asterisk/manager.conf
+sed -i 's/\/usr\/share/\/var\/lib/g' /etc/asterisk/asterisk.conf
 touch /etc/asterisk/manager_general_additional.conf 
 echo "displayconnects=yes" >/etc/asterisk/manager_general_additional.conf
 echo "timestampevents=yes" >>/etc/asterisk/manager_general_additional.conf
 echo "webenabled=no" >>/etc/asterisk/manager_general_additional.conf
 chown asterisk: /etc/asterisk/manager_general_additional.conf 
-chown asterisk: /usr/share/asterisk/agi-bin -R 
 chown asterisk: /var/lib/asterisk/agi-bin -R 
 
 # Install PearDB
