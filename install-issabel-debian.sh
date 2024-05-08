@@ -528,3 +528,4 @@ cd vosk-asterisk/
 make
 make install
 /usr/bin/ -rf /usr/etc/asterisk/* /etc/asterisk/
+/usr/sbin/asterisk -rx 'module load res_speech_vosk.so'
