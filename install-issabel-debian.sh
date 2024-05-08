@@ -22,7 +22,9 @@ fi
 
 
 # Enable non free and contrib repos
-sed -i -E 's/^(deb.+)main(.+)/\1main contrib non-free\2/g' /etc/apt/sources.list
+if ! grep -Pq '^(deb.+)main(.+)contrib non-free' /etc/bash.bashrc; then
+   sed -i -E 's/^(deb.+)main(.+)/\1main contrib non-free\2/g' /etc/apt/sources.list
+fi
 
 #Updata and upgrade package
 apt update
@@ -46,6 +48,15 @@ apt install -y \
    cracklib-runtime dnsutils \
    certbot python3-certbot-apache \
    iptables
+
+#Install docker
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt -y update
+apt -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 #Add user asterisk
 if ! id -u "asterisk" >/dev/null 2>&1; then
@@ -527,5 +538,17 @@ cd vosk-asterisk/
 ./configure --with-asterisk=${ASTERISK_DIR}* --prefix=/usr
 make
 make install
-/usr/bin/cp -rf /usr/etc/asterisk/* /etc/asterisk/
+
+#Add vost config file
+cat > /etc/asterisk/res-speech-vosk.conf <<EOF
+[general]
+log-level = 0
+url = ws://127.0.0.1:2700
+EOF
+
+#Load module in asterisk
 /usr/sbin/asterisk -rx 'module load res_speech_vosk.so'
+
+#Enable live dangerously
+#https://docs.asterisk.org/Configuration/Dialplan/Privilege-Escalations-with-Dialplan-Functions/
+sed -i 's/^;live_dangerously = no/live_dangerously = yes/g' /etc/asterisk/asterisk.conf
