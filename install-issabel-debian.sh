@@ -44,7 +44,7 @@ apt install -y \
    mariadb-server mariadb-client \
    libmariadb-dev cockpit net-tools \
    dialog locales-all libwww-perl \
-   mpg123 fail2ban  \
+   mpg123 sox fail2ban  \
    cracklib-runtime dnsutils \
    certbot python3-certbot-apache \
    iptables
@@ -552,3 +552,30 @@ EOF
 #Enable live dangerously
 #https://docs.asterisk.org/Configuration/Dialplan/Privilege-Escalations-with-Dialplan-Functions/
 sed -i 's/^;live_dangerously = no/live_dangerously = yes/g' /etc/asterisk/asterisk.conf
+
+#Asterisk service systemd
+cat > /lib/systemd/system/vosk.service <<EOF
+[Unit]
+Description=Vosk Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=7
+Restart=always
+ExecStart=/usr/bin/docker run --rm --name vosk \
+    -p 2700:2700 \
+    issabel/vosk-asr-es:latest
+
+ExecStop=/usr/bin/docker stop vosk
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#Start vosk
+systemctl enable vosk.service
+systemctl start vosk.service
+
+#Install perl lib
+perl -MCPAN -e "install LWP::Protocol::https; install Digest::MD5"
