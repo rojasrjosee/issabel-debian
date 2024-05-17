@@ -567,7 +567,7 @@ make install
 
 
 #Add asterisk vost module resource config file
-cat > /etc/asterisk/res-speech-vosk.conf <<EOF
+cat > /etc/asterisk/res_speech_vosk.conf <<EOF
 [general]
 log-level = 0
 url = ws://127.0.0.1:2700
