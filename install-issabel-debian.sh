@@ -64,7 +64,7 @@ if ! id -u "asterisk" >/dev/null 2>&1; then
 fi
 
 #Download Asterisk
-ASTERISK_DIR="${ASTERISK_SRC_FILE%%.*}"
+ASTERISK_SRC_DIR="$(basename $ASTERISK_SRC_FILE .tar.gz)"
 ASTERISK_URL_DOWNLOAD=$ASTERISK_URL/$ASTERISK_SRC_FILE
 if echo "$ASTERISK_SRC_FILE" | grep -Fq "certified" ; then
    ASTERISK_URL_DOWNLOAD=$ASTERISK_URL_CERTIFIED/$ASTERISK_SRC_FILE
@@ -76,8 +76,10 @@ cd /usr/src
    wget $ASTERISK_URL_DOWNLOAD
 }
 
-tar zxvf $ASTERISK_SRC_FILE
-cd ${ASTERISK_DIR}*/
+[[ -d /usr/src/${ASTERISK_SRC_DIR} ]] || mkdir -p /usr/src/${ASTERISK_SRC_DIR}
+
+tar zxvf $ASTERISK_SRC_FILE -C /usr/src/${ASTERISK_SRC_DIR} --strip-components=1
+cd ${ASTERISK_SRC_DIR}/
 
 #Install Asterisk dependencies
 contrib/scripts/install_prereq install
@@ -530,30 +532,7 @@ systemctl restart fail2ban
 # Logrotate
 /usr/bin/cp -rf $SOURCE_DIR_SCRIPT/logrotate/asterisk_logrotate.conf /etc/logrotate.d/asterisk.conf
 
-#Install Vosk
-cd /usr/src
-git clone  https://github.com/alphacep/vosk-asterisk
-cd vosk-asterisk/
-./bootstrap
-./configure --with-asterisk=${ASTERISK_DIR}* --prefix=/usr
-make
-make install
-
-#Add vost config file
-cat > /etc/asterisk/res-speech-vosk.conf <<EOF
-[general]
-log-level = 0
-url = ws://127.0.0.1:2700
-EOF
-
-#Load module in asterisk
-/usr/sbin/asterisk -rx 'module load res_speech_vosk.so'
-
-#Enable live dangerously
-#https://docs.asterisk.org/Configuration/Dialplan/Privilege-Escalations-with-Dialplan-Functions/
-sed -i 's/^;live_dangerously = no/live_dangerously = yes/g' /etc/asterisk/asterisk.conf
-
-#Asterisk service systemd
+#Vosk docker container unit systemd
 cat > /lib/systemd/system/vosk.service <<EOF
 [Unit]
 Description=Vosk Container
@@ -576,6 +555,33 @@ EOF
 #Start vosk
 systemctl enable vosk.service
 systemctl start vosk.service
+
+#Install asterisk vosk module
+cd /usr/src
+git clone  https://github.com/alphacep/vosk-asterisk
+cd vosk-asterisk/
+./bootstrap
+./configure --with-asterisk=/usr/src/${ASTERISK_SRC_DIR} --prefix=/usr
+make
+make install
+
+
+#Add asterisk vost module resource config file
+cat > /etc/asterisk/res-speech-vosk.conf <<EOF
+[general]
+log-level = 0
+url = ws://127.0.0.1:2700
+EOF
+
+#Load module in asterisk
+/usr/sbin/asterisk -rx 'module load res_speech_vosk.so'
+
+#Enable live dangerously
+#https://docs.asterisk.org/Configuration/Dialplan/Privilege-Escalations-with-Dialplan-Functions/
+sed -i 's/^;live_dangerously = no/live_dangerously = yes/g' /etc/asterisk/asterisk.conf
+
+#Restart asterisk 
+systemctl restart asterisk
 
 #Install perl lib
 perl -MCPAN -e "install LWP::Protocol::https; install Digest::MD5"
